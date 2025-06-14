@@ -5,6 +5,7 @@ import { UserService } from '../user/user.service';
 import { RoleService } from '../role/role.service';
 import { User } from 'src/entities/User.entity';
 import * as bcrypt from 'bcrypt';
+import { UserRolesDto } from './dto/user-roles.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,10 +17,20 @@ export class AuthService {
     async checkPassword(password: string, user: User): Promise<boolean> {
         return await bcrypt.compare(password, user.password);
     }
-    async validateUserByUuid(uuid: string): Promise<User | null> {
+    async validateUserByUuid(uuid: string): Promise<UserRolesDto | null> {
         const user = await this.userService.getUserByUuid(uuid);
+        const responseUser = new UserRolesDto();
         if (user) {
-            return user;
+            responseUser.userUuid = user.uuid;
+            const roles = await this.roleService.getRolesByEmail(user.email);
+            let roleNames;
+            if(!roles) {
+                roleNames = [];
+            }else{
+                roleNames = roles.map(role => role.name);
+            }
+            responseUser.roles = roleNames;
+            return responseUser;
         }
         return null;
     }
@@ -39,8 +50,6 @@ export class AuthService {
         }else{
             roleNames = roles.map(role => role.name);
         }
-        console.log(roleNames);
-        console.log(roles);
         const payload: JwtPayloadDto = {
             uuid: user.uuid,
             email: user.email,

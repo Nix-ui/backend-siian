@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Post, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, Body, Post, UseGuards, Param, Req } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AssignRoleByNamesDto } from './dto/asign-role.dto';
 import { RegisterUserDto } from 'src/user-interface/user/dto/register-user.dto';
@@ -15,6 +15,7 @@ import { RegisterAcademicPeriodDto } from 'src/admin-interface/academic-period/d
 import { RegisterCourseDto } from '../course/dto/register-course.dto';
 import { RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from 'src/teacher-interface/teacher/dto/register-teacher.dto';
 import { CreateStudentDto, RegisterStudentDto } from 'src/student-interface/student/dto/create-student.dto';
+import { Request } from 'express';
 
 
 
@@ -53,7 +54,7 @@ export class AdminController {
     @ApiResponse({ status: 201, description: 'Department registered successfully' })
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
-    async registerDepartment(@Body() registerDepartmentDto: RegisterDepartmentDto): Promise<any> {
+    async registerDepartment(@Body() registerDepartmentDto: RegisterDepartmentDto,@Req() req:Request): Promise<any> {
         return await this.adminService.registerDepartment(registerDepartmentDto);
     }
     @Post('register-subject')
