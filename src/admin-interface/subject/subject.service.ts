@@ -40,5 +40,50 @@ export class SubjectService {
     async getAllSubjects(): Promise<Subject[]> {
         return await this.subjectRepository.find();
     }
-    async 
+    async getSubjectByCarrer(carrerName: string): Promise<Subject[]> {
+        const carrer = await this.carrerService.getCarrerByName(carrerName);
+        if (!carrer) {
+            throw new Error('Carrer not found');
+        }
+        return await this.subjectRepository.find({
+            where: {
+                carrers: {
+                    id: carrer.id,
+                },
+            },
+        });
+    }
+    async getSubjectByCarrerId(carrerId: number): Promise<Subject[]> {
+        const carrer = await this.carrerService.getCarrerById(carrerId);
+        if (!carrer) {
+            throw new Error('Carrer not found');
+        }
+        return await this.subjectRepository.find({
+            where: {
+                carrers: {
+                    id: carrer.id,
+                },
+            },
+        });
+    }
+    async getSubjectByCode(code: string): Promise<Subject | null> {
+        return await this.subjectRepository.findOne({
+            where: {
+                code: code,
+            },
+        });
+    }
+    async asignSubjectToCarrer(subjectCode: string, carrerName: string): Promise<Subject> {
+        const carrer = await this.carrerService.getCarrerByName(carrerName);
+        if (!carrer) {
+            throw new Error('Carrer not found');
+        }
+        const subject = await this.getSubjectByCode(subjectCode);
+        if (!subject) {
+            throw new Error('Subject not found');
+        }
+        subject.carrers.push(carrer);
+        carrer.subjects.push(subject);
+        return this.subjectRepository.save(subject);
+    }
 }

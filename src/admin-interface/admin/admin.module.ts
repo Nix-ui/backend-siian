@@ -6,9 +6,15 @@ import { UserModule } from 'src/user-interface/user/user.module';
 import { CarrerModule } from '../carrer/carrer.module';
 import { DepartmentModule } from '../department/department.module';
 import { SubjectModule } from '../subject/subject.module';
+import { AcademicPeriodModule } from '../academic-period/academic-period.module';
+import { CourseModule } from '../course/course.module';
+import { TeacherModule } from 'src/teacher-interface/teacher/teacher.module';
+import { StudentModule } from 'src/student-interface/student/student.module';
 
 @Module({
-  imports: [RoleModule, UserModule, CarrerModule, DepartmentModule, SubjectModule],
+  imports: [RoleModule, UserModule, CarrerModule, DepartmentModule, SubjectModule
+    ,AcademicPeriodModule,CourseModule,TeacherModule,StudentModule
+  ],
   providers: [AdminService],
   controllers: [AdminController]
 })

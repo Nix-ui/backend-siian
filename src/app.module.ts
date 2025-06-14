@@ -14,6 +14,11 @@ import { AdminModule } from './admin-interface/admin/admin.module';
 import { DepartmentModule } from './admin-interface/department/department.module';
 import { CarrerModule } from './admin-interface/carrer/carrer.module';
 import { SubjectModule } from './admin-interface/subject/subject.module';
+import { StudentModule } from './student-interface/student/student.module';
+import { EnrollmentModule } from './student-interface/enrollment/enrollment.module';
+import { CourseModule } from './admin-interface/course/course.module';
+import { TeacherModule } from './teacher-interface/teacher/teacher.module';
+import { AcademicPeriodModule } from './admin-interface/academic-period/academic-period.module';
 
 @Module({
   imports: [
@@ -36,7 +41,7 @@ import { SubjectModule } from './admin-interface/subject/subject.module';
         synchronize: true
         }
       }
-    }),UserModule, AuthModule, RoleModule, AddressModule,StoredProcedureModule, AdminModule, DepartmentModule, CarrerModule, SubjectModule
+    }),UserModule, AuthModule, RoleModule, AddressModule,StoredProcedureModule, AdminModule, DepartmentModule, CarrerModule, SubjectModule, StudentModule, EnrollmentModule, CourseModule, TeacherModule, AcademicPeriodModule
   ],
   controllers: [AppController],
   providers: [AppService]

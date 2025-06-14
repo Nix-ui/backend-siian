@@ -105,4 +105,36 @@ export class RoleService {
         })
         return role;
     }
+    async asingRoleToUserByUuidAndRoleName(uuid: string, roleName: string): Promise<Role> {
+        const user = await this.userService.getUserByUuid(uuid);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const role = await this.roleRepository.findOne({
+            where: {
+                name: roleName
+            }
+        });
+        if (!role) {
+            throw new Error('Role not found');
+        }
+        const updateUser = await this.userService.asignRoleToUser(user.uuid, role);
+        role.users.push(updateUser);
+        const updatedRole = await this.roleRepository.save(role);
+        return updatedRole;
+    }
+    async getRoleByName(name: string): Promise<Role> {
+        const role = await this.roleRepository.findOne({
+            where: {
+                name
+            }
+        });
+        if (!role) {
+            throw new Error('Role not found');
+        }
+        return role;
+    }
+    async saveRole(role: Role): Promise<Role> {
+        return await this.roleRepository.save(role);
+    }
 }

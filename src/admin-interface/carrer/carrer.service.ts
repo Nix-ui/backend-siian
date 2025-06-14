@@ -24,7 +24,7 @@ export class CarrerService {
             name: carrer.name,
             description: carrer.description,
             departmentId: department.id,
-            state: carrer.state as any, // Cast to any or to the correct enum if available
+            state: carrer.state as any,
             totalSemester: carrer.totalSemester,
             creationDate: new Date(actualTime).toISOString().replace('T', ' ').split('.')[0]
         }
@@ -39,6 +39,13 @@ export class CarrerService {
     }
     async getAllCarrers(): Promise<Carrer[]> {
         return await this.carrerRepository.find();
+    }
+    async getCarrerByDepartmentId(departmentId: number): Promise<Carrer[]> {
+        return await this.carrerRepository.find({
+            where: {
+                departmentId,
+            },
+        });
     }
     async getCarrerByDepartment(departmentName: string): Promise<Carrer[]> {
         const department = await this.departmentService.getDepartmentByName(departmentName);
@@ -64,5 +71,8 @@ export class CarrerService {
                 name,
             },
         });
+    }
+    async saveCarrer(carrer: Carrer): Promise<Carrer> {
+        return await this.carrerRepository.save(carrer);
     }
 }

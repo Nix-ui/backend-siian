@@ -87,4 +87,19 @@ export class UserService {
         });
         return await this.userRepository.save(updateUser);
     }
+    async asignRole(userUuid: string, role: string): Promise<User> {
+        const user = await this.getUserByUuid(userUuid);
+        if (!user) {
+            throw new Error('User not found');
+        }
+        const roleEntity = await this.databaseService.executeStoredProcedure(`getRoleByName`, [role]);
+        const updateUser = await this.userRepository.save({
+            ...user,
+            roles: [roleEntity]
+        });
+        return await this.userRepository.save(updateUser);
+    }
+    async saveUser(user: User): Promise<User> {
+        return await this.userRepository.save(user);
+    }
 }

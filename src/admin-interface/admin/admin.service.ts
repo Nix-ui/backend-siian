@@ -10,6 +10,15 @@ import { RegisterSubjectDto, CreateSubjectDto } from '../subject/dto/register-su
 import { AssignRoleByNamesDto } from './dto/asign-role.dto';
 import { RegisterUserDto } from 'src/user-interface/user/dto/register-user.dto';
 import { CreateUserDto } from 'src/user-interface/user/dto/create-user.dto';
+import { RegisterAcademicPeriodDto } from 'src/admin-interface/academic-period/dto/register-academic-period';
+import { RegisterCourseDto } from '../course/dto/register-course.dto';
+import { RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from 'src/teacher-interface/teacher/dto/register-teacher.dto';
+import { AcademicPeriodService } from '../academic-period/academic-period.service';
+import { CourseService } from '../course/course.service';
+import { TeacherService } from 'src/teacher-interface/teacher/teacher.service';
+import { StudentService } from 'src/student-interface/student/student.service';
+import { CreateStudentDto, RegisterStudentDto } from 'src/student-interface/student/dto/create-student.dto';
+
 
 @Injectable()
 export class AdminService {
@@ -17,7 +26,11 @@ export class AdminService {
         private userService: UserService,
         private carrerService: CarrerService,
         private departmentService: DepartmentService,
-        private subjectService: SubjectService
+        private subjectService: SubjectService,
+        private academicPeriodService: AcademicPeriodService,
+        private courseService: CourseService,
+        private teacherService: TeacherService,
+        private studentService: StudentService,
     ) {}
     async assignRoleByNames(assignRoleByNamesDto: AssignRoleByNamesDto): Promise<any> {
         const { email, roleName } = assignRoleByNamesDto;
@@ -43,5 +56,61 @@ export class AdminService {
     async createSubject(createSubjectDto: CreateSubjectDto): Promise<any> {
         const subject = await this.subjectService.createSubject(createSubjectDto);
         return subject;
+    }
+    async registerAcademicPeriod(registerAcademicPeriodDto: RegisterAcademicPeriodDto): Promise<any> {
+        const academicPeriod = await this.academicPeriodService.registerAcademicPeriod(registerAcademicPeriodDto);
+        return academicPeriod;
+    }
+    async registerCourse(registerCourseDto: RegisterCourseDto): Promise<any> {
+        const course = await this.courseService.registerCourse(registerCourseDto);
+        return course;
+    }
+    async registerTeacher(registerTeacherDto: RegisterTeacherDto): Promise<any> {
+        const teacher = await this.teacherService.registerTeacher(registerTeacherDto);
+        return teacher;
+    }
+    async registerTeacherWithSubjects(registerTeacherWithSubjectsDto: RegisterTeacherWithSubjectsDto): Promise<any> {
+        const teacher = await this.teacherService.registerTeacherWithSubjects(registerTeacherWithSubjectsDto);
+        return teacher;
+    }
+    async registerStudent(registerStudentDto: RegisterStudentDto): Promise<any> {
+        const student = await this.studentService.registerStudent(registerStudentDto);
+        return student;
+    }
+    async createStudent(createStudentDto: CreateStudentDto): Promise<any> {
+        const student = await this.studentService.createStudent(createStudentDto);
+        return student;
+    }
+    async getCarrers(): Promise<any> {
+        const carrers = await this.carrerService.getAllCarrers();
+        return carrers;
+    }
+    async getCarrersByDepartmentId(departmentId: number): Promise<any> {
+        const carrers = await this.carrerService.getCarrerByDepartmentId(departmentId);
+        return carrers;
+    }
+    async getCarrersByDepartment(departmentName: string): Promise<any> {
+        const carrers = await this.carrerService.getCarrerByDepartment(departmentName);
+        return carrers;
+    }
+    async getDepartments(): Promise<any> {
+        const departments = await this.departmentService.getDepartments();
+        return departments;
+    }
+    async getSubjects(): Promise<any> {
+        const subjects = await this.subjectService.getAllSubjects();
+        return subjects;
+    }
+    async getSubjectsByCarrer(carrerName: string): Promise<any> {
+        const subjects = await this.subjectService.getSubjectByCarrer(carrerName);
+        return subjects;
+    }
+    async getSubjectsByCarrerId(carrerId: number): Promise<any> {
+        const subjects = await this.subjectService.getSubjectByCarrerId(carrerId);
+        return subjects;
+    }
+    async getAcademicPeriods(): Promise<any> {
+        const academicPeriods = await this.academicPeriodService.getAllAcademicPeriods();
+        return academicPeriods;
     }
 }
