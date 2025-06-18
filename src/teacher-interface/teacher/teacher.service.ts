@@ -43,7 +43,7 @@ export class TeacherService {
                 registerTeacher.hireDate
             ]
         )
-        this.roleService.signRoleToUserByEmailAndRoleName(user.email, 'teacher');
+        this.roleService.asignRoleToUserByEmailAndRoleName(user.email, 'teacher');
         return this.getTeacherByUuid(user.uuid);
     }
     async registerTeacherWithSubjects(registerTeacher: CreateTeacherWithSubjectsDto) {
@@ -59,7 +59,7 @@ export class TeacherService {
             ]
         )
         const teacher = await this.getTeacherByUuid(user.uuid);
-        this.roleService.signRoleToUserByEmailAndRoleName(user.email, 'teacher');
+        this.roleService.asignRoleToUserByEmailAndRoleName(user.email, 'teacher');
         registerTeacher.subjects.forEach((subjectCode) => {
             this.databaseService.executeStoredProcedure('assingSubjectToTeacherUuid',
                 [
