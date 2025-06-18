@@ -12,7 +12,7 @@ import { RegisterUserDto } from 'src/user-interface/user/dto/register-user.dto';
 import { CreateUserDto } from 'src/user-interface/user/dto/create-user.dto';
 import { RegisterAcademicPeriodDto } from 'src/admin-interface/academic-period/dto/register-academic-period';
 import { RegisterCourseDto } from '../course/dto/register-course.dto';
-import { RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from 'src/teacher-interface/teacher/dto/register-teacher.dto';
+import { CreateTeacherDto, CreateTeacherWithSubjectsDto, RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from 'src/teacher-interface/teacher/dto/register-teacher.dto';
 import { AcademicPeriodService } from '../academic-period/academic-period.service';
 import { CourseService } from '../course/course.service';
 import { TeacherService } from 'src/teacher-interface/teacher/teacher.service';
@@ -69,11 +69,11 @@ export class AdminService {
         const course = await this.courseService.registerCourse(registerCourseDto);
         return course;
     }
-    async registerTeacher(registerTeacherDto: RegisterTeacherDto): Promise<any> {
+    async registerTeacher(registerTeacherDto: CreateTeacherDto): Promise<any> {
         const teacher = await this.teacherService.registerTeacher(registerTeacherDto);
         return teacher;
     }
-    async registerTeacherWithSubjects(registerTeacherWithSubjectsDto: RegisterTeacherWithSubjectsDto): Promise<any> {
+    async registerTeacherWithSubjects(registerTeacherWithSubjectsDto: CreateTeacherWithSubjectsDto): Promise<any> {
         const teacher = await this.teacherService.registerTeacherWithSubjects(registerTeacherWithSubjectsDto);
         return teacher;
     }

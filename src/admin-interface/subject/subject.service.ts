@@ -35,7 +35,11 @@ export class SubjectService {
             carrers: [],
         }
         newSubject.carrers.push(carrer);
-        return this.subjectRepository.save(newSubject);
+        const responseSubject = this.subjectRepository.save(newSubject);
+        console.log(responseSubject);
+        const asignSubject =this.asignSubjectToCarrer(subject.code,carrer.id);
+        return asignSubject;
+        
     }
     async getAllSubjects(): Promise<Subject[]> {
         return await this.subjectRepository.find();
@@ -73,17 +77,7 @@ export class SubjectService {
             },
         });
     }
-    async asignSubjectToCarrer(subjectCode: string, carrerName: string): Promise<Subject> {
-        const carrer = await this.carrerService.getCarrerByName(carrerName);
-        if (!carrer) {
-            throw new Error('Carrer not found');
-        }
-        const subject = await this.getSubjectByCode(subjectCode);
-        if (!subject) {
-            throw new Error('Subject not found');
-        }
-        subject.carrers.push(carrer);
-        carrer.subjects.push(subject);
-        return this.subjectRepository.save(subject);
+    async asignSubjectToCarrer(subjectCode: string, carrerId: number): Promise<Subject> {
+        return this.databaseService.executeStoredProcedure('asignCarrerToSubject', [subjectCode, carrerId]);
     }
 }

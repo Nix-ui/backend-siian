@@ -20,8 +20,6 @@ export class AddressService {
     async registerAddress(addressInfo: CreateAddressDto): Promise<Address> {
         const provinces = await this.provinceService.getProvinceByDepartment(addressInfo.department);
         const address = new Address();
-        console.log(addressInfo);
-        console.log(provinces);
         provinces.forEach(province => {
             if (province.name === addressInfo.province) {
                 address.provinceId = province.id;
@@ -33,7 +31,6 @@ export class AddressService {
         }else{
             address.details = null;
         }
-        console.log(address);
         return await this.addressRepository.save(address);
     }
 }
