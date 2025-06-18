@@ -19,6 +19,8 @@ import { EnrollmentModule } from './student-interface/enrollment/enrollment.modu
 import { CourseModule } from './admin-interface/course/course.module';
 import { TeacherModule } from './teacher-interface/teacher/teacher.module';
 import { AcademicPeriodModule } from './admin-interface/academic-period/academic-period.module';
+import { ClassModule } from './resources/class/class.module';
+import { NotesModule } from './resources/notes/notes.module';
 
 @Module({
   imports: [
@@ -41,7 +43,7 @@ import { AcademicPeriodModule } from './admin-interface/academic-period/academic
         synchronize: true
         }
       }
-    }),UserModule, AuthModule, RoleModule, AddressModule,StoredProcedureModule, AdminModule, DepartmentModule, CarrerModule, SubjectModule, StudentModule, EnrollmentModule, CourseModule, TeacherModule, AcademicPeriodModule
+    }),UserModule, AuthModule, RoleModule, AddressModule,StoredProcedureModule, AdminModule, DepartmentModule, CarrerModule, SubjectModule, StudentModule, EnrollmentModule, CourseModule, TeacherModule, AcademicPeriodModule, ClassModule, NotesModule
   ],
   controllers: [AppController],
   providers: [AppService]

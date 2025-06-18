@@ -52,4 +52,19 @@ export class CourseService {
     async saveCourse(course: Course): Promise<Course> {
         return this.courseRepository.save(course);
     }
+    async getCourseByAcademicPeriodId(academicPeriodId: number): Promise<Course[]> {
+        return this.courseRepository.find({
+            where: {
+                academicPeriod: academicPeriodId
+            }
+        });
+    }
+    async getCourseByAcademicPeriodIdAndTeacherUuid(academicPeriodId: number, teacherUuid: string): Promise<Course[]> {
+        return this.courseRepository.find({
+            where: {
+                academicPeriod: academicPeriodId,
+                teacherUuid: teacherUuid
+            }
+        });
+    }
 }

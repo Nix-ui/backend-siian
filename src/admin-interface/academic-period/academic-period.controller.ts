@@ -8,4 +8,8 @@ export class AcademicPeriodController {
     async registerAcademicPeriod(@Body() academicPeriod: RegisterAcademicPeriodDto) {
         return await this.academicPeriodService.registerAcademicPeriod(academicPeriod);
     }
+    @Get()
+    async getAcademicPeriods() {
+        return await this.academicPeriodService.getAllAcademicPeriods();
+    }
 }

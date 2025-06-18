@@ -4,7 +4,7 @@ import { UserService } from 'src/user-interface/user/user.service';
 import { CarrerService } from '../carrer/carrer.service';
 import { DepartmentService } from '../department/department.service';
 import { SubjectService } from '../subject/subject.service';
-import { RegisterCarrerDto } from '../carrer/dto/register-carrer.dto';
+import { RegisterCarrerDto, RegisterFullCarrerDto } from '../carrer/dto/register-carrer.dto';
 import { RegisterDepartmentDto } from '../department/dto/register-department.dto';
 import { RegisterSubjectDto, CreateSubjectDto } from '../subject/dto/register-subject.dto';
 import { AssignRoleByNamesDto } from './dto/asign-role.dto';
@@ -43,6 +43,10 @@ export class AdminService {
     }
     async registerCarrer(registerCarrerDto: RegisterCarrerDto): Promise<any> {
         const carrer = await this.carrerService.registerCarrer(registerCarrerDto);
+        return carrer;
+    }
+    async createCarrer(registerCarrerDto: RegisterFullCarrerDto): Promise<any> {
+        const carrer = await this.carrerService.createCarrer(registerCarrerDto);
         return carrer;
     }
     async registerDepartment(registerDepartmentDto: RegisterDepartmentDto): Promise<any> {
