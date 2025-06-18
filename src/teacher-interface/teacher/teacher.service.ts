@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Course } from 'src/entities/Course.entity';
 import { Subject } from 'src/entities/Subject.entity';
 import { UserService } from 'src/user-interface/user/user.service';
-import { RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from './dto/register-teacher.dto';
+import { CreateTeacherDto, CreateTeacherWithSubjectsDto, RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from './dto/register-teacher.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { SubjectService } from 'src/admin-interface/subject/subject.service';
 import { RoleService } from 'src/user-interface/role/role.service';
@@ -31,36 +31,42 @@ export class TeacherService {
             }
         });
     }
-    async registerTeacher(registerTeacher: RegisterTeacherDto) {
+    async registerTeacher(registerTeacher: CreateTeacherDto) {
         const user = await this.userService.createUser(registerTeacher);
+        const foundUser = await this.userService.getUserByEmail(registerTeacher.email);
+        if (!foundUser) {
+            throw new Error('User not found');
+        }
         this.databaseService.executeStoredProcedure('insertTeacher',
             [
-                user.uuid,
+                foundUser.uuid,
                 registerTeacher.hireDate
             ]
         )
         this.roleService.asingRoleToUserByUuidAndRoleName(user.uuid, 'teacher');
         return this.getTeacherByUuid(user.uuid);
     }
-    async registerTeacherWithSubjects(registerTeacher: RegisterTeacherWithSubjectsDto) {
+    async registerTeacherWithSubjects(registerTeacher: CreateTeacherWithSubjectsDto) {
         const user = await this.userService.createUser(registerTeacher);
+        const foundUser = await this.userService.getUserByEmail(registerTeacher.email);
+        if (!foundUser) {
+            throw new Error('User not found');
+        }
         this.databaseService.executeStoredProcedure('insertTeacher',
             [
-                user.uuid,
+                foundUser.uuid,
                 registerTeacher.hireDate
             ]
         )
         const teacher = await this.getTeacherByUuid(user.uuid);
         this.roleService.asingRoleToUserByUuidAndRoleName(user.uuid, 'teacher');
-        const subjects = registerTeacher.subjectCodes.map(async (subjectCode) => {
-            const subject = await this.subjectService.getSubjectByCode(subjectCode);
-            if (subject && teacher) {
-                teacher.subjects.push(subject);
-            }
+        registerTeacher.subjects.forEach((subjectCode) => {
+            this.databaseService.executeStoredProcedure('assingSubjectToTeacherUuid',
+                [
+                    foundUser.uuid,
+                    subjectCode
+                ]);
         });
-        if (teacher) {
-            await this.teacherRepository.save(teacher);
-        }
         return this.getTeacherByUuid(user.uuid);
     }
 }

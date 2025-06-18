@@ -1,5 +1,6 @@
-import { Controller,Get, Body,Param } from '@nestjs/common';
+import { Controller,Get, Body,Param, Req } from '@nestjs/common';
 import { DepartmentAddressService } from './department-address.service';
+import { Request } from 'express';
 @Controller('department-address')
 export class DepartmentAddressController {
     constructor(private readonly departmentAddressService: DepartmentAddressService) {}
@@ -8,7 +9,6 @@ export class DepartmentAddressController {
         const actualTime = new Date();
         const timeZone = actualTime.getTimezoneOffset();
         const timeActual = new Date().setTime(actualTime.getTime() - timeZone * 60 * 1000)
-        console.log(new Date(timeActual).toISOString());
         return await this.departmentAddressService.GetAllDepartments();
     }
     @Get(':name')

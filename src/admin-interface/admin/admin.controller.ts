@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Post, UseGuards, Param } from '@nestjs/common';
+import { Controller, Get, Body, Post, UseGuards, Param, Req } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AssignRoleByNamesDto } from './dto/asign-role.dto';
 import { RegisterUserDto } from 'src/user-interface/user/dto/register-user.dto';
@@ -8,13 +8,14 @@ import { JwtAuthGuard } from 'src/user-interface/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/user-interface/auth/guards/roles.guard';
 import { CurrentUser } from 'src/user-interface/auth/decorators/current-user.decorator';
 import { Roles } from 'src/user-interface/auth/decorators/roles.decorator';
-import { RegisterCarrerDto } from '../carrer/dto/register-carrer.dto';
+import { RegisterCarrerDto, RegisterFullCarrerDto } from '../carrer/dto/register-carrer.dto';
 import { RegisterDepartmentDto } from '../department/dto/register-department.dto';
 import { CreateSubjectDto, RegisterSubjectDto } from '../subject/dto/register-subject.dto';
 import { RegisterAcademicPeriodDto } from 'src/admin-interface/academic-period/dto/register-academic-period';
 import { RegisterCourseDto } from '../course/dto/register-course.dto';
-import { RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from 'src/teacher-interface/teacher/dto/register-teacher.dto';
+import { CreateTeacherDto, CreateTeacherWithSubjectsDto, RegisterTeacherDto, RegisterTeacherWithSubjectsDto } from 'src/teacher-interface/teacher/dto/register-teacher.dto';
 import { CreateStudentDto, RegisterStudentDto } from 'src/student-interface/student/dto/create-student.dto';
+import { Request } from 'express';
 
 
 
@@ -48,12 +49,20 @@ export class AdminController {
     async registerCarrer(@Body() registerCarrerDto: RegisterCarrerDto): Promise<any> {
         return await this.adminService.registerCarrer(registerCarrerDto);
     }
+    @Post('create-carrer')
+    @Roles('admin')
+    @ApiResponse({ status: 201, description: 'Academic period registered successfully' })
+    @ApiResponse({ status: 400, description: 'Bad request' })
+    @ApiResponse({ status: 403, description: 'Forbidden' })
+    async createCarrer(@Body() registerCarrer: RegisterFullCarrerDto): Promise<any> {
+        return await this.adminService.createCarrer(registerCarrer);
+    }
     @Post('create-department')
     @Roles('admin')
     @ApiResponse({ status: 201, description: 'Department registered successfully' })
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
-    async registerDepartment(@Body() registerDepartmentDto: RegisterDepartmentDto): Promise<any> {
+    async registerDepartment(@Body() registerDepartmentDto: RegisterDepartmentDto,@Req() req:Request): Promise<any> {
         return await this.adminService.registerDepartment(registerDepartmentDto);
     }
     @Post('register-subject')
@@ -94,7 +103,7 @@ export class AdminController {
     @ApiResponse({ status: 201, description: 'Teacher registered successfully' })
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
-    async registerTeacher(@Body() registerTeacherDto: RegisterTeacherDto): Promise<any> {
+    async registerTeacher(@Body() registerTeacherDto: CreateTeacherDto): Promise<any> {
         return await this.adminService.registerTeacher(registerTeacherDto);
     }
     @Post('register-teacher-with-subjects')
@@ -102,7 +111,7 @@ export class AdminController {
     @ApiResponse({ status: 201, description: 'Teacher registered successfully' })
     @ApiResponse({ status: 400, description: 'Bad request' })
     @ApiResponse({ status: 403, description: 'Forbidden' })
-    async registerTeacherWithSubjects(@Body() registerTeacherWithSubjectsDto: RegisterTeacherWithSubjectsDto): Promise<any> {
+    async registerTeacherWithSubjects(@Body() registerTeacherWithSubjectsDto: CreateTeacherWithSubjectsDto): Promise<any> {
         return await this.adminService.registerTeacherWithSubjects(registerTeacherWithSubjectsDto);
     }
     @Post('register-student')

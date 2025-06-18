@@ -5,6 +5,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -48,19 +49,7 @@ export class Carrer {
 
   @OneToMany(() => Student, (student) => student.carrer)
   students: Student[];
-  @OneToMany(() => Subject, (subject) => subject.carrers)
-  @JoinTable({
-    name:"carrersubject",
-    joinColumn:{
-      name:"carrerId",
-      referencedColumnName:"id"
-    },
-    inverseJoinColumn:{
-      name:"subjectCode",
-      referencedColumnName:"code"
-    },
-    schema:"siian"
-  })
-  subjects: Subject[]
 
+  @ManyToMany(() => Subject, (subject) => subject.carrers)
+  subjects: Subject[];
 }

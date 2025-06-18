@@ -21,20 +21,20 @@ export class StudentService {
         private readonly carrerService: CarrerService,
     ) {}
     async createStudent(createStudentDto: CreateStudentDto): Promise<Student> {
-        await this.userService.createUser(createStudentDto);
-        const user = await this.userService.getUserByEmail(createStudentDto.email) as  User;
         const carrer = await this.carrerService.getCarrerByName(createStudentDto.carrer);
-        this.roleService.asingRoleToUserByUuidAndRoleName(user.uuid, 'student');
-        const student = new Student();
+        console.log(carrer);
         if (carrer) {
-            student.carrerId = carrer.id;
-            student.userUuid = user.uuid;
-            user.students.push(student);
-            carrer.students.push(student);
-            this.userService.saveUser(user);
-            this.carrerService.saveCarrer(carrer);
+            await this.userService.createUser(createStudentDto);
+            const user = await this.userService.getUserByEmail(createStudentDto.email) as  User;
+            this.roleService.asingRoleToUserByUuidAndRoleName(user.uuid, 'student');
+            return this.studentRepository.save({
+                carrerId: carrer.id,
+                userUuid: user.uuid,
+            });
+        }else{
+            throw new Error('Carrera no encontrada');
         }
-        return await this.studentRepository.save(student);
+        
     }
     async registerStudent(registerStudentDto: RegisterStudentDto): Promise<Student | null> {
         const user = await this.userService.getUserByEmail(registerStudentDto.email) as User;
@@ -42,17 +42,15 @@ export class StudentService {
         if (!user || !carrer) {
             return null;
         }
+        console.log(user);
         this.roleService.asingRoleToUserByUuidAndRoleName(user.uuid, 'student');
         const student = new Student();
         student.carrerId = carrer.id;
         student.userUuid = user.uuid;
-        user.students.push(student);
-        carrer.students.push(student);
-        this.userService.saveUser(user);
-        this.carrerService.saveCarrer(carrer);
         return await this.studentRepository.save(student);
     }
     async saveStudent(student: Student): Promise<Student> {
+        console.log(student);
         return await this.studentRepository.save(student);
     }
 }

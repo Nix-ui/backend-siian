@@ -37,15 +37,28 @@ export class CarrerService {
             newCarrer.creationDate,
         ]);
     }
+    async createCarrer(carrer: RegisterFullCarrerDto): Promise<RegisterFullCarrerDto>{
+        return this.databaseService.executeStoredProcedure<RegisterFullCarrerDto>('insertCarrer',[
+            carrer.name,
+            carrer.description,
+            carrer.totalSemester,
+            carrer.departmentId,
+            carrer.state,
+            carrer.creationDate,
+        ]);
+    }
     async getAllCarrers(): Promise<Carrer[]> {
         return await this.carrerRepository.find();
     }
     async getCarrerByDepartmentId(departmentId: number): Promise<Carrer[]> {
-        return await this.carrerRepository.find({
+        console.log(departmentId);
+        const carrers: Carrer[] = await this.carrerRepository.find({
             where: {
-                departmentId,
+                departmentId: departmentId,
             },
         });
+        console.log(carrers);
+        return carrers;
     }
     async getCarrerByDepartment(departmentName: string): Promise<Carrer[]> {
         const department = await this.departmentService.getDepartmentByName(departmentName);

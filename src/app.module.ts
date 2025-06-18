@@ -19,13 +19,16 @@ import { EnrollmentModule } from './student-interface/enrollment/enrollment.modu
 import { CourseModule } from './admin-interface/course/course.module';
 import { TeacherModule } from './teacher-interface/teacher/teacher.module';
 import { AcademicPeriodModule } from './admin-interface/academic-period/academic-period.module';
+import { ClassModule } from './resources/class/class.module';
+import { NotesModule } from './resources/notes/notes.module';
 
 @Module({
   imports: [
     DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: 'development.env',
+      envFilePath: process.env.NODE_ENV !== 'production' ? 'development.env' : undefined,
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
       load: [config],
     }),
     TypeOrmModule.forRootAsync({
@@ -37,11 +40,10 @@ import { AcademicPeriodModule } from './admin-interface/academic-period/academic
         username: config().database.username,
         password: config().database.password,
         database: config().database.database,
-        entities: [ __dirname + '/**/*.entity{.ts,.js}' ],
-        synchronize: true
+        entities: [ __dirname + '/**/*.entity{.ts,.js}' ]
         }
       }
-    }),UserModule, AuthModule, RoleModule, AddressModule,StoredProcedureModule, AdminModule, DepartmentModule, CarrerModule, SubjectModule, StudentModule, EnrollmentModule, CourseModule, TeacherModule, AcademicPeriodModule
+    }),UserModule, AuthModule, RoleModule, AddressModule,StoredProcedureModule, AdminModule, DepartmentModule, CarrerModule, SubjectModule, StudentModule, EnrollmentModule, CourseModule, TeacherModule, AcademicPeriodModule, ClassModule, NotesModule
   ],
   controllers: [AppController],
   providers: [AppService]

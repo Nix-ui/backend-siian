@@ -97,8 +97,6 @@ export class RoleService {
             throw new Error('Role not found');
         }
         const updateUser = await this.userService.asignRoleToUser(user.uuid, role);
-        console.log(role);
-        console.log(updateUser);
         const updatedRole = await this.roleRepository.save({
             ...role,
             users: [updateUser]
@@ -119,7 +117,6 @@ export class RoleService {
             throw new Error('Role not found');
         }
         const updateUser = await this.userService.asignRoleToUser(user.uuid, role);
-        role.users.push(updateUser);
         const updatedRole = await this.roleRepository.save(role);
         return updatedRole;
     }
